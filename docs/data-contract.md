@@ -32,7 +32,7 @@ This is using a format for the ML model's output uses so Yessi's Python code and
 
 |`region_id`| string | Which part of the Mountain |
 
-|`delta_m | number | The Elevation Change in meters (negative means its lower) | 
+|`delta_m` | number | The Elevation Change in meters (negative means its lower) | 
 
 
 ## Sample/Placeholder data
