@@ -1,0 +1,42 @@
+[
+  {
+    "year": 2035,
+    "ice_extent_pct": 0.88,
+    "elevation_delta_by_region": [
+      { "region_id": "north_face", "delta_m": -4.2 },
+      { "region_id": "south_face", "delta_m": -3.1 }
+    ]
+  },
+  {
+    "year": 2045,
+    "ice_extent_pct": 0.74,
+    "elevation_delta_by_region": [
+      { "region_id": "north_face", "delta_m": -9.8 },
+      { "region_id": "south_face", "delta_m": -7.5 }
+    ]
+  },
+  {
+    "year": 2055,
+    "ice_extent_pct": 0.61,
+    "elevation_delta_by_region": [
+      { "region_id": "north_face", "delta_m": -15.6 },
+      { "region_id": "south_face", "delta_m": -12.0 }
+    ]
+  },
+  {
+    "year": 2065,
+    "ice_extent_pct": 0.49,
+    "elevation_delta_by_region": [
+      { "region_id": "north_face", "delta_m": -21.3 },
+      { "region_id": "south_face", "delta_m": -16.8 }
+    ]
+  },
+  {
+    "year": 2075,
+    "ice_extent_pct": 0.38,
+    "elevation_delta_by_region": [
+      { "region_id": "north_face", "delta_m": -27.1 },
+      { "region_id": "south_face", "delta_m": -21.4 }
+    ]
+  }
+]
