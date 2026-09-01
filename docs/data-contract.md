@@ -26,9 +26,12 @@ This is using a format for the ML model's output uses so Yessi's Python code and
 
 |  `year` | number | the projection year EX: 2035 (10 years from now) |
 
-|`ice_extent_pct` | number (0-1) | Fraction of the ice extent that remains|
-|`elevation_delta_by_region`| list | Per Region| elevation change (Or if you want to do the a single overall extent number)|
-|`region_id`| string | Which part of the Mountain|
+|`ice_extent_pct` | number (0-1) | Fraction of the ice extent that remains |
+
+|`elevation_delta_by_region`| list | Per Region| elevation change (Or if you want to do the a single overall extent number) |
+
+|`region_id`| string | Which part of the Mountain |
+
 |`delta_m | number | The Elevation Change in meters (negative means its lower) | 
 
 
