@@ -46,3 +46,5 @@ This is a rough draft of the first schema for this.
 Hopefully this helps you with your code.
 
 This isnt set in stone just something to get you started or at least help you.
+
+"Mont Blanc" (https://skfb.ly/oqAvX) by rossiotaliafrancisco is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
