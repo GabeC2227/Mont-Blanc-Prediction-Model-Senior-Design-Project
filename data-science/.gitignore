@@ -1,0 +1,13 @@
+# Raw datasets
+data/raw/
+
+# NetCDF files
+*.nc
+
+# Python/Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
