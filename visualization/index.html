@@ -4,10 +4,33 @@
     <meta charset="utf-8">
     <title>Mont Blanc</title>
     <style>
-      body { margin: 0; }
+      body {
+        margin: 0;
+      }
+
+      /* This makes the slider float over the canvas */
+      .slider-overlay {
+        position: absolute;
+        bottom: 20px;      /* distance from bottom */
+        left: 50%;         /* center horizontally */
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.8);
+        padding: 5px;
+        border-radius: 8px;
+        /* Make the whole box wider */
+        width: 800px;      
+        text-align: center;
+      }
+
+    
+      /* Make the slider itself longer - relative to overlay container */
+      .slider-overlay input[type="range"] {
+        width: 70%;       
+      }
+      
     </style>
   </head>
-  <body>
+  <body> <!-- Elements go in body, wtf are these modifiers-->
     <script type="importmap">
     {
       "imports": {
@@ -17,5 +40,17 @@
     }
     </script>
     <script type="module" src="./main.js"></script>
+    <!--Age Slider Implementation-->
+    <div class = "slider-overlay">
+      <p>Age Slider:</p>
+      <input type="range" name="Age" min="10" max="50"/>
+      <!--Constant Rotation Check Box-->
+      <input type="checkbox" id="Rotate">
+      <label for="Rotate">Constant Model Rotation</label>
+    <div>
+    <div class="checkbox-row"></div>
+        <input type="checkbox" id="Auto">
+        <label for="Auto">Auto Progress Slider</label>
+    <div>
   </body>
 </html>

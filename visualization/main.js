@@ -34,6 +34,9 @@ loader.load('./Assets/mont_blanc.glb',
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
 
+        // Shift model so its center is at the origin
+        model.position.sub(center);
+
         console.log('Model size:', size);
         console.log('Model center:', center);
 
@@ -48,16 +51,29 @@ loader.load('./Assets/mont_blanc.glb',
         controls.target.copy(center);
         controls.update();
 
+        
+
     },
     undefined, // onProgress
     (error) => { console.error('An error has occurred:', error); }
 );
 
+const rotateCheckbox = document.getElementById("Rotate");
+let rotateModel = false;
+
+// When checkbox is clicked, toggle rotation
+rotateCheckbox.addEventListener("change", () => {
+    rotateModel = rotateCheckbox.checked;
+});
+
 
 function animate( time ) {
-    if (model) {
-        controls.update(); // required for damping to work
-        renderer.render( scene, camera );
+    if (rotateModel && model) {
+    model.rotation.y += 0.01;   // constant rotation speed
     }
+
+    controls.update(); // required for damping to work
+    renderer.render( scene, camera );
+    
 }
 renderer.setAnimationLoop(animate);
