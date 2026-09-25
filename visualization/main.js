@@ -126,6 +126,7 @@ loader.load('./Assets/mont_blanc.glb',
 
 
         // Using RayCaster  on
+        // WHERE VERTICALLY 
         const rayOrigin = new THREE.Vector3(
             testPosition.x,
             box.max.y + 10,
