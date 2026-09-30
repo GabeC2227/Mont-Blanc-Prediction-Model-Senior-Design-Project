@@ -167,16 +167,10 @@ loader.load('./Assets/mont_blanc.glb',
         makePointsOfInterest(45.89,6.93,0xED74E7,box);
         //Glacier des Bossons - yellow
         makePointsOfInterest(45.8850,6.8400,0xEED111,box);
-        //lac blanc - purple
-        //slightly out of bounds, made approximation on latitiude
-        makePointsOfInterest(45.9000,6.8891,0x8F0EC2,box);
         //glacier de bionnassay - orange
         makePointsOfInterest(45.8487,6.8080,0xEE8311,box);
         //miage glacier - dark blue
         makePointsOfInterest(45.8042,6.8406,0x1039C2,box);
-        //glacier d'argentine - teal
-        //slightly out of bounds, made approximation on latitiude
-        makePointsOfInterest(45.9000,6.9794,0x0DB896,box);
         //grandes jorasses - dark green
         makePointsOfInterest(45.8689,6.9881,0x045208,box);
 
