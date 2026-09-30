@@ -89,7 +89,8 @@ function makePointsOfInterest(latitude, longitude, color, box){
     if (intersections.length > 0) {
         const hitPoint = intersections[0].point; 
         marker.position.set( hitPoint.x, hitPoint.y + 0.2, hitPoint.z);
-        scene.add(marker);
+        //now markers spin w/model when rotation box is checked
+        model.add(marker);
         console.log("Marker placed:", latitude, longitude, marker.position);
     return marker;
     }
