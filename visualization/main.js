@@ -62,6 +62,44 @@ function geoToModel(latitude, longitude, box) {
     return {x, z};
         
 }
+//too much work and code to make points of interest one by one so I made a function
+function makePointsOfInterest(latitude, longitude, color, box){
+
+    const position = geoToModel(
+            latitude,
+            longitude,
+            box
+    );
+
+    const marker = new THREE.Mesh(
+        new THREE.SphereGeometry(0.2, 32, 32),
+        new THREE.MeshBasicMaterial({ color })
+    );
+
+    const rayOrigin = new THREE.Vector3(
+        position.x,
+        box.max.y + 10,
+        position.z
+    );
+    
+    const raycaster = new THREE.Raycaster( rayOrigin, new THREE.Vector3(0, -1, 0));
+    
+    const intersections = raycaster.intersectObject(model, true);
+    
+    if (intersections.length > 0) {
+        const hitPoint = intersections[0].point; 
+        marker.position.set( hitPoint.x, hitPoint.y + 0.2, hitPoint.z);
+        //now markers spin w/model when rotation box is checked
+        model.add(marker);
+        console.log("Marker placed:", latitude, longitude, marker.position);
+    return marker;
+    }
+    //Chamonix-Mont-Blanc and Mer de Glace dont hit??? HELP
+    console.warn("Raycaster didn't hit terrain:", latitude, longitude, position);
+    
+    return null;
+};
+
 
 let model; // keep a reference to model just in case
 
@@ -99,71 +137,48 @@ loader.load('./Assets/mont_blanc.glb',
         camera.lookAt(0, 0, 0);
         controls.target.set(0, 0, 0);
         controls.update();
-        
-
-        // Testing Marker to get the center if correct
+    
 
         const testLatitude = 45.8;
         const testLongitude = 6.8;
 
-        const testPosition = geoToModel(
+        const secondLatitude = 45.85;
+        const secondLongitude = 6.95;
+
+        //reference to center
+        const centerPosition = geoToModel(
             testLatitude,
             testLongitude,
             box
         );
 
         // Debug test if we see that this code sec is running
+        console.log("TEST MARKER SHOW UPPPPP", centerPosition); 
 
-        console.log("TEST MARKER SHOW UPPPPP", testPosition);
-
-        const markerGeometry = new THREE.SphereGeometry(0.2, 32, 32);
-
-        const markerMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff0000
-        });
-
-        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-
-
-        // Using RayCaster  on
-        // WHERE VERTICALLY 
-        const rayOrigin = new THREE.Vector3(
-            testPosition.x,
-            box.max.y + 10,
-            testPosition.z
-        );
-
-        // Shoot it straight downward
-
-        const rayDirection = new THREE.Vector3( 0, -1, 0);
-
-        // Now we create the raycaster
-        const raycaster = new THREE.Raycaster(rayOrigin, rayDirection);
-
-        // Checkin for intersections with the model, true if all child meshes are inside the GLB
-        const intersections = raycaster.intersectObject(model ,true);
-
-        // Place Marker on the terrain
-
-        if (intersections.length > 0) {
-
-            const hitPoint = intersections[0].point;
-
-            console.log("Terrain hit:" , hitPoint);
-
-             
-            marker.position.set(hitPoint.x, hitPoint.y + 0.2, hitPoint.z);
-
-            scene.add(marker);
-
-            console.log("Marker placed on the Terrain", marker.position);
-        } 
-        
-        else {
-
-            console.warn("Raycaster didn't hit the terrain at this coordinate");
-
-        }
+        //Mont Blanc Summit - red
+        makePointsOfInterest(45.8,6.8,0xff0000,box );
+        //Chamonix-Mont-Blanc - light green
+        //slightly out of bounds, made approximation on latitiude
+        makePointsOfInterest(45.89,6.87,0x00ff00,box);
+        //Aiguille du Midi - light blue
+        makePointsOfInterest(45.8786,6.8872,0x27C8F5,box);
+        //Mer de Glace - light pink
+        //slightly out of bounds, made approximation on latitiude
+        makePointsOfInterest(45.89,6.93,0xED74E7,box);
+        //Glacier des Bossons - yellow
+        makePointsOfInterest(45.8850,6.8400,0xEED111,box);
+        //lac blanc - purple
+        //slightly out of bounds, made approximation on latitiude
+        makePointsOfInterest(45.9000,6.8891,0x8F0EC2,box);
+        //glacier de bionnassay - orange
+        makePointsOfInterest(45.8487,6.8080,0xEE8311,box);
+        //miage glacier - dark blue
+        makePointsOfInterest(45.8042,6.8406,0x1039C2,box);
+        //glacier d'argentine - teal
+        //slightly out of bounds, made approximation on latitiude
+        makePointsOfInterest(45.9000,6.9794,0x0DB896,box);
+        //grandes jorasses - dark green
+        makePointsOfInterest(45.8689,6.9881,0x045208,box);
 
     },
     undefined, // onProgress
