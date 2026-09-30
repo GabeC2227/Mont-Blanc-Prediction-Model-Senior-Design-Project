@@ -154,41 +154,30 @@ loader.load('./Assets/mont_blanc.glb',
         // Debug test if we see that this code sec is running
         console.log("TEST MARKER SHOW UPPPPP", centerPosition); 
 
-        //Mont Blanc Summit
-        makePointsOfInterest(
-            45.8,
-            6.8,
-            0xff0000,
-            box
-        );
-        //Chamonix-Mont-Blanc - didnt hit
-        makePointsOfInterest(
-            45.89,
-            6.87,
-            0x00ff00,
-            box
-        );
-        //Aiguille du Midi
-        makePointsOfInterest(
-            45.88,
-            6.89,
-            0x00ff00,
-            box
-        );
-        //Mer de Glace - didnt hit
-        makePointsOfInterest(
-            45.89,
-            6.93,
-            0x00ff00,
-            box
-        );
-        //Glacier des Bossons
-        makePointsOfInterest(
-            45.89,
-            6.84,
-            0x00ff00,
-            box
-        );
+        //Mont Blanc Summit - red
+        makePointsOfInterest(45.8,6.8,0xff0000,box );
+        //Chamonix-Mont-Blanc - light green
+        //slightly out of bounds, made approximation on latitiude
+        makePointsOfInterest(45.89,6.87,0x00ff00,box);
+        //Aiguille du Midi - light blue
+        makePointsOfInterest(45.8786,6.8872,0x27C8F5,box);
+        //Mer de Glace - light pink
+        //slightly out of bounds, made approximation on latitiude
+        makePointsOfInterest(45.89,6.93,0xED74E7,box);
+        //Glacier des Bossons - yellow
+        makePointsOfInterest(45.8850,6.8400,0xEED111,box);
+        //lac blanc - purple
+        //slightly out of bounds, made approximation on latitiude
+        makePointsOfInterest(45.9000,6.8891,0x8F0EC2,box);
+        //glacier de bionnassay - orange
+        makePointsOfInterest(45.8487,6.8080,0xEE8311,box);
+        //miage glacier - dark blue
+        makePointsOfInterest(45.8042,6.8406,0x1039C2,box);
+        //glacier d'argentine - teal
+        //slightly out of bounds, made approximation on latitiude
+        makePointsOfInterest(45.9000,6.9794,0x0DB896,box);
+        //grandes jorasses - dark green
+        makePointsOfInterest(45.8689,6.9881,0x045208,box);
 
     },
     undefined, // onProgress
