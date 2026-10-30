@@ -1,66 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Mont Blanc</title>
-    <style>
-      html,
-      body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: black;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mont Blanc Climate Change Projection</title>
+    <!-- Linking the external stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-      }
+    <!-- Main Section -->
+    <main class="main-section">
+        <div class="toggle">
+            <input type="checkbox"/>
+            <label></label>
+        </div>
+        
+        <div class="main-content">
+            <h1>    Welcome to Mont Blanc Climate Change Projection Project</h1>
+            <p>This is the Mont Blanc:</p>
 
-      canvas {
-        display: block;
-      }
+            <figure>
+                <img src="/Assets/MontBlanc2.jpg" alt="Panoramic view of the Mont Blanc massif">
+                <figcaption>The Mont Blanc massif. Photo Credits: Marek Piwnicki</figcaption>
+            </figure>
 
-      /* This makes the slider float over the canvas */
-      .slider-overlay {
-        position: absolute;
-        bottom: 20px;      /* distance from bottom */
-        left: 50%;         /* center horizontally */
-        transform: translateX(-50%);
-        background: rgba(255, 255, 255, 0.8);
-        padding: 5px;
-        border-radius: 8px;
-        /* Make the whole box wider */
-        width: min(800px, 90%);      
-        text-align: center;
-      }
+            <p>A beautiful mountain range with millions of years of history</p>
+            
+            <p>apart of the alps
+            It was first summited in 1786 by Dr. Michel-Gabriel Paccard and Jacques Balmat, and since then its popularity has skyrocketed.
+            big tourist attraction, brings in millions a year
+            used for olympic training
+            supports a massive ecosystem, providing water, etc...
+            tourism supports a town at the base
+            cultural icon
 
-    
-      /* Make the slider itself longer - relative to overlay container */
-      .slider-overlay input[type="range"] {
-        width: 70%;       
-      }
-      
-    </style>
-  </head>
-  <body> <!-- Elements go in body, wtf are these modifiers-->
-    <script type="importmap">
-    {
-      "imports": {
-        "three": "./node_modules/three/build/three.module.js",
-        "three/addons/": "./node_modules/three/examples/jsm/"
-      }
-    }
-    </script>
-    <script type="module" src="./main.js"></script>
-    <!--Age Slider Implementation-->
-    <div class = "slider-overlay">
-      <p>Age Slider:</p>
-      <input type="range" name="Age" min="10" max="50"/>
-      <!--Constant Rotation Check Box-->
-      <input type="checkbox" id="Rotate">
-      <label for="Rotate">Constant Model Rotation</label>
-    <div>
-    <div class="checkbox-row"></div>
-        <input type="checkbox" id="Auto">
-        <label for="Auto">Auto Progress Slider</label>
-    <div>
-  </body>
+            the mont blanc is responsible for so much, yet so few understand its importance and how its being effected
+            which is why weve created the projection project, to raise awareness.
+
+            Using our project, users will visually see the impact of climate change on the mont blanc.
+            much easier to understand than a lecture and reduces confusion
+            easier for children to understand,etc...</p>
+
+            <p>Learn the history of Mont Blanc, its importance to the Alpine environment, and how climate change is affecting one of Europe's most iconic mountain regions.</p>
+            <p>The Mont Blanc Climate Change Projection is an interactive 3D educational application designed to help users explore the environmental impacts of climate change on the Mont Blanc massif over time.</p>
+            <p>Combining machine learning projections with an intuitive 3D experience, users can visualize how glaciers, snow cover, and the surrounding environment may change over the next 50 years.</p>
+
+            <h1>    Why is this Important?</h1>
+            <p>Mont Blanc is home to some of the most important glaciers and ecosystems in the Alps. Rising global temperatures are causing glaciers to retreat, reducing snow cover, and increasing the risk of rockfalls and habitat loss.</p>
+            <p>Understanding these changes helps scientists, policymakers, and the public make informed decisions about conservation, sustainability, and climate action. Through visualization and exploration, this project makes complex climate data easier to understand.</p>
+            
+            <h1>    History of Mont Blanc</h1>
+            <p>Mont Blanc, meaning "White Mountain," is the highest mountain in the Alps and Western Europe. Located along the border of France and Italy, it has long been a symbol of exploration, adventure, and scientific discovery.</p>
+            <p>The first successful ascent of Mont Blanc took place in 1786 and is widely considered the beginning of modern mountaineering. Today, the region attracts visitors from around the world and serves as an important site for environmental and climate research.</p>
+            <button class="cta-button" onclick="window.location.href='model.html'">Launch 3D Simulation</button>
+        </div>
+
+        <div class="container">
+            <div class="box">
+                <img src="/Assets/CREA Logo.png" alt="Panoramic view of the Mont Blanc massif">
+                <h1>CREA</h1>
+                <p>- Founded in 1996</p>
+                <p>- specialised in the study of natural mountain environments</p>
+                <p>- maintains a strong commitment to participatory science, aiming not only to encourage the understanding of ecology</p>
+                <p>- Encourages participation of the public in innovative scientific research</p>
+                <p>- An innovative hybrid between an academic laboratory and a field work organization</p> 
+                <p>- Extends to other French and trans-border ranges.</p>
+                <p>- Partners with other numerous organizations</p>
+                <p>BUTTON:CLICK TO LEARN MORE-LINK TO MAIN PAGE</p>
+            </div>
+
+            <div class="box">
+                <img src="/Assets/Main_zooniverse.jpg" alt="Panoramic view of the Mont Blanc massif">
+                <h1>ZOONIVERSE</h1>
+                <p>- Emphasis on animal behavior and the study and preservation of native wildlife and their behavior.</p>
+                <p>- Largely Volunteer based</p>
+                <p>- Volunteers submit photos and information about wildlife sightings and aid in identifying species.</p>
+                <p>- improve scientific knowledge about the biology of alpine species and to understand how climate change and human activities are affecting their ecology.</p>
+                <p>- Have numerous ongoing projects not just focused on the Mont Blanc.</p>
+                <p>BUTTON:CLICK TO LEARN MORE-LINK TO MAIN PAGE</p>
+            </div>
+
+            <div class="box">
+                <img src="/Assets/ademe-logo-2022-1.svg" alt="ademe logo">
+                <h1>ADEME</h1>
+                <p>- Focuses on fighting climate change in general across France, works closely with many other organizations to do so.</p>
+                <p>- resolutely committed to the fight against climate change and resource degradation.</p>
+                <p>- we are mobilizing citizens, economic stakeholders, and local communities to empower them to make progress.</p>
+                <p>- moving away from fossil fuels is essential. By focusing on renewable energy, electrification, and local solutions</p>
+                <p>BUTTON:CLICK TO LEARN MORE-LINK TO MAIN PAGE</p>
+            </div>
+        </div>
+
+
+        
+
+    </main>
+
+</body>
 </html>

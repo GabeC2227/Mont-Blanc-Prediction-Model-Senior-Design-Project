@@ -324,6 +324,7 @@ if (CALIBRATION_MODE) {
         makePointsOfInterest(0.371, 2.072, 0x00ff00, box);
         
         //Mer de Glace - light pink
+
         
         makePointsOfInterest(6.473,-1.226, 0xED74E7,box);
 
@@ -351,6 +352,13 @@ rotateCheckbox.addEventListener("change", () => {
     rotateModel = rotateCheckbox.checked;
 });
 
+//When check box is checked, auto progress slider
+const ageSlider = document.getElementById("AgeSlider")
+const autoCheckbox = document.getElementById("Auto");
+//let autoProgress = false;
+// autoCheckbox.addEventListener("change", () => {
+//     autoProgress = autoCheckbox.checked;
+// });
 
 function animate( time ) {
     if (rotateModel && model && !CALIBRATION_MODE) {
@@ -360,5 +368,16 @@ function animate( time ) {
     controls.update(); // required for damping to work
     renderer.render( scene, camera );
     
+
+    // if (autoProgress) {
+    //     let currentValue = Number(ageSlider.value);
+    //     currentValue += 0.05;
+    //     if (currentValue > Number(ageSlider.max)) {
+    //         currentValue = Number(ageSlider.min);
+    //     }
+    //     ageSlider.value = currentValue;
+    // }
+
+
 }
 renderer.setAnimationLoop(animate);
