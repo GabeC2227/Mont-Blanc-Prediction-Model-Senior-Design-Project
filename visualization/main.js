@@ -2,6 +2,8 @@ import * as THREE from './node_modules/three/build/three.module.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'; //load model
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'; //camera movement
 
+import { createGlacierPrototype, buildIllustrativeTimeline } from './glacierPrototype.js';
+
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -365,6 +367,22 @@ loader.load('./Assets/mont_blanc.glb',
         // Shift model so its center is at the origin
         model.position.sub(center);
 
+        let glacierTest = null;
+        let glacierTimeline = new Map();
+        try {
+            const response = await fetch(
+                '../data-science/data/processed/MontBlanc_Visualization_MassBalance_SSP245_2027-2076.json'
+            );
+            if (!response.ok) throw new Error(`Forecast JSON failed: ${response.status}`);
+            glacierTimeline = buildIllustrativeTimeline(await response.json());
+            glacierTest = await createGlacierPrototype(model);
+            glacierTest.setRemainingFraction(
+                glacierTimeline.get(Number(document.getElementById('AgeSlider').value)) ?? 1
+            );
+        } catch (error) {
+            console.error('Terrain snow visualization:', error);
+        }
+
         box = new THREE.Box3().setFromObject(model);
         // Prediction markers move and rotate with the mountain.
         model.add(predictionLayer);
@@ -445,6 +463,10 @@ yearSlider.addEventListener("input", () => {
 
     yearDisplay.textContent = selectedYear;
     updatePredictionLayer(selectedYear, globalMinMassBalance, globalMaxMassBalance);
+
+    if (glacierTest && glacierTimeline.has(selectedYear)) {
+        glacierTest.setRemainingFraction(glacierTimeline.get(selectedYear));
+    }
 
 });
 
