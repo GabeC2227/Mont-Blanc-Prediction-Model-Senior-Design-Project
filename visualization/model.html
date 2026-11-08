@@ -51,8 +51,11 @@
 
     <!-- Age Slider Implementation -->
     <div class="slider-overlay">
-      <p>Age Slider:</p>
-      <input type="range" id="AgeSlider" min="10" max="100" value="10"/>
+      <label for="Age Slider:">
+        Prediction Year:
+        <span id="yearDisplay">2027</span>
+      </label>
+      <input type="range" id="AgeSlider" min="2027" max="2076" value="2027" step="1">
       <!-- Constant Rotation Check Box -->
       <input type="checkbox" id="Rotate">
       <label for="Rotate">Constant Model Rotation</label>
