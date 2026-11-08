@@ -6,6 +6,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
 const renderer = new THREE.WebGLRenderer();
+renderer.setClearColor(0x1b4f8f, 1); //background color blue??? not working :(
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -96,14 +97,14 @@ function geoToModel(latitude, longitude, box) {
         
 }
 //too much work and code to make points of interest one by one so I made a function
-function makePointsOfInterest(x, z, color, box) {
+function makePointsOfInterest(x, z, color, box, name, info) {
 
     const marker = new THREE.Mesh(
         new THREE.SphereGeometry(0.2, 32, 32),
         new THREE.MeshBasicMaterial({ color })
     );
-
-    marker.raycast = () => {};
+    //made points unclickable, fixed?
+    //marker.raycast = () => {};
 
     const rayOrigin = new THREE.Vector3(
         x,
@@ -137,6 +138,10 @@ function makePointsOfInterest(x, z, color, box) {
         );
 
         model.add(marker);
+        
+        //
+        marker.userData = { name, info };   
+        markers.push(marker);   
 
         console.log(
             `Point of interest placed: x=${x}, z=${z}`
@@ -156,6 +161,10 @@ function makePointsOfInterest(x, z, color, box) {
 
 
 let model; // keep a reference to model just in case
+
+//beginning of point and click
+const terrainMeshes = []; // for placing markers
+const markers = []; //clickable points
 
 // =============================
 //     CLICK DEBUGGER 
@@ -200,6 +209,7 @@ loader.load('./Assets/mont_blanc.glb',
     (gltf) => {
         model = gltf.scene;
         scene.add(model);
+        model.traverse((o) => { if (o.isMesh) terrainMeshes.push(o); }); //collect terrain meshes in loader
         console.log('Model loaded successfully!', gltf);
 
         // Auto-fit camera to model size 
@@ -315,27 +325,36 @@ if (CALIBRATION_MODE) {
         // These aren't latitude/longitude values but calibrated using three.js x/z coordinates
 
         //Mont Blanc Summit - red using peakbagger coordinates test coords TEST 1
-        makePointsOfInterest(0.34,6.20,0xff0000,box );
+        makePointsOfInterest(0.34,6.20,0xff0000,box, 'Mont Blanc Summit',
+    'The highest point in the Alps. French surveyors measured the summit at 4,807.47 m in October 2026. The height changes with the snow and ice cap on top of the rock.');
 
         //Aiguille du Midi - light blue CALIBRATION TEST 2
-        makePointsOfInterest(2.188, 1.042,0x27C8F5,box);
+        makePointsOfInterest(2.188, 1.042,0x27C8F5,box, 'Aiguille du Midi',
+    'A needle-shaped peak above Chamonix at 3,842 m, reached by cable car. It is the starting point for the Vallée Blanche.');
 
         // Bosson Glaicer - light green 
-        makePointsOfInterest(0.371, 2.072, 0x00ff00, box);
+        makePointsOfInterest(0.371, 2.072, 0x00ff00, box, 'Bossons Glacier',
+    'A glacier that flows from the Mont Blanc summit area down toward the Chamonix valley.');
         
         //Mer de Glace - light pink
-
-        
-        makePointsOfInterest(6.473,-1.226, 0xED74E7,box);
+        makePointsOfInterest(6.473, -1.226, 0xED74E7, box,
+            'Mer de Glace',
+            "France's largest glacier, about 7 km long and up to 200 m thick. In the last 30 years it has lost more ice than in the 170 years between 1825 and 1995.");
 
         // Argentiere Glacier - teal
-        makePointsOfInterest(11.193,-5.716,0x0DB896,box);
+        makePointsOfInterest(11.193, -5.716, 0x0DB896, box,
+            'Argentière Glacier',
+            'TODO: add facts about the Argentière Glacier.');
 
-        // La Vallee Blanche - Magenta 
-        makePointsOfInterest(3.575, 1.525, 0xff00ff, box);
+        // La Vallee Blanche - Magenta
+        makePointsOfInterest(3.575, 1.525, 0xff00ff, box,
+            'La Vallée Blanche',
+            'A famous off-piste route across glacier ice, starting at the Aiguille du Midi.');
 
         // Glaciar de Bionnassay
-        makePointsOfInterest(-3.032, 6.137,0x00ffff, box);
+        makePointsOfInterest(-3.032, 6.137, 0x00ffff, box,
+            'Bionnassay Glacier',
+            'TODO: add facts about the Bionnassay Glacier.');
 
 
 
@@ -360,9 +379,58 @@ const autoCheckbox = document.getElementById("Auto");
 //     autoProgress = autoCheckbox.checked;
 // });
 
+
+//POI CLICK FUNCTIONALITY
+//wonky camera controls when zoomed, also constant rotation wonky, needs fixing
+let zoomGoal = null;        // where the camera is currently flying to (null = not flying)
+const ZOOM_DISTANCE = 4;    // how close the camera ends up to the marker
+
+const clickRaycaster = new THREE.Raycaster(); //raycaster reports what it hits
+const pointer = new THREE.Vector2(); //2d, keeps track of where the mouse is
+const panel = document.getElementById('poi-ui-panel') //gets info from HTML so the code can show/hide it and fill it in
+
+//
+renderer.domElement.addEventListener('click', (event)=> {
+//
+const rect = renderer.domElement.getBoundingClientRect(); //gets size and shape of screen
+pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1; // Mouse horizontal position into num
+pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1; // mouse vert into num
+clickRaycaster.setFromCamera(pointer, camera); // Aims the raycaster from the camera, through the spot where you clicked, into the scene.
+const hits = clickRaycaster.intersectObjects(markers, false); //finds which marker has been clicked, false means only test markers themselves, not attached to them
+//wth is happening omg it looks nuts
+//if marker is clicked
+if (hits.length > 0) {
+    const { name, info } = hits[0].object.userData; //go to nearest to click and pull info
+    panel.innerHTML = `<h2>${name}</h2><p>${info}</p>`; //fill popup panel with info
+    panel.classList.remove('hidden');
+    const markerPos = hits[0].object.getWorldPosition(new THREE.Vector3());
+    const dir = camera.position.clone().sub(markerPos).normalize();
+    zoomGoal = {
+        target: markerPos,
+        position: markerPos.clone().add(dir.multiplyScalar(ZOOM_DISTANCE))
+    }; 
+} else {
+        // ...if the click missed every marker, hide the panel again.
+        panel.classList.add('hidden');
+    }
+});
+
+
+
+
+
+
+
 function animate( time ) {
     if (rotateModel && model && !CALIBRATION_MODE) {
     model.rotation.y += 0.01;   // constant rotation speed
+    }
+
+    //zoom animation math stuffs
+    if (zoomGoal) {
+        controls.target.lerp(zoomGoal.target, 0.08);
+        camera.position.lerp(zoomGoal.position, 0.08);
+        if (camera.position.distanceTo(zoomGoal.position) < 0.01) zoomGoal = null;
     }
 
     controls.update(); // required for damping to work

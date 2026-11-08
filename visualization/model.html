@@ -11,18 +11,38 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: black;
+        background: #1b4f8f;;
       }
+
+      .poi-panel {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: min(320px, 85%);
+        padding: 16px 18px;
+        color: #0a2540;
+        background: linear-gradient(135deg, #ffffff, #cfe3ff);
+        border-radius: 18px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .poi-panel.hidden { display: none; }
+      .poi-panel h2 { margin: 0 0 8px; font-size: 1.1rem; }
+      .poi-panel p { margin: 0; line-height: 1.5; }
+
 
       canvas {
         display: block;
       }
 
       /* This makes the slider float over the canvas */
+      /*ts is still ugly omfg*/
       .slider-overlay {
         position: absolute;
         bottom: 20px;      /* distance from bottom */
         left: 50%;         /* center horizontally */
+        color: #0a2540;                                          
+        font-weight: 600; 
         transform: translateX(-50%);
         background: rgba(255, 255, 255, 0.8);
         padding: 5px;
@@ -34,8 +54,30 @@
 
       /* Make the slider itself longer - relative to overlay container */
       .slider-overlay input[type="range"] {
-        width: 70%;
+        width: 70%;                               
       }
+
+      /*Back button reused*/
+      .back-button {
+        position: absolute;          
+        top: 10px;                   
+        left: 16px;                  
+        width: fit-content;
+        margin: 2.5rem auto 0;
+        padding: 16px 44px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #0a2540;
+        background: linear-gradient(135deg, #ffffff, #cfe3ff);
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+
     </style>
   </head>
   <body>
@@ -58,11 +100,14 @@
       <label for="Rotate">Constant Model Rotation</label>
     </div>
 
-    <!-- <div class="checkbox-row">
+    <!-- <div class="checkbox-row"> IGNORE THIS PLEASEEEE
         <input type="checkbox" id="Auto">
         <label for="Auto">Auto Progress Slider</label>
     </div> -->
     
-    <a href="index.html" style="position:absolute;top:16px;left:16px;color:white;">← Back</a>
+    <!--Back Button-->
+    <a class="back-button" href="index.html">← Back</a>
+
+    <div id="poi-ui-panel" class="poi-panel hidden"></div>
   </body>
 </html>
