@@ -200,7 +200,7 @@ function makePointsOfInterest(x, z, color, box) {
     return null;
 }
 
-// helper function for the makePredictionMarker
+// Converts the prediction severity into marker size and color.
 
 function getPredictionStyle(value, globalMin, globalMax) {
 
@@ -209,26 +209,23 @@ function getPredictionStyle(value, globalMin, globalMax) {
    const severity = THREE.MathUtils.clamp(
     (globalMax - value) / (globalMax - globalMin), 0, 1);
 
-    const scale = THREE.MathUtils.lerp(0.60, 1.60, severity);
+    const scale = THREE.MathUtils.lerp(0.80, 2.00, severity);
     
     // color scale for severity from blue -> yellow -> red
-    const color = new THREE.Color();
-    if (severity < 0.5) {
-        
-        color.lerpColors(
-            new THREE.Color(0x3399ff), // blue
-            new THREE.Color(0xffdd33), // yellow
-            severity / 0.5
-        );
+    let color;
 
-    } else {
-        color.lerpColors( 
-            new THREE.Color(0xffdd33), // yellow
-            new THREE.Color(0xff3300), // red
-            (severity - 0.5) / 0.5
-        );
+    if (severity < 0.25) {
+        color = new THREE.Color(0x0047AB); // Blue
+    } 
+    else if (severity < 0.50) {
+        color = new THREE.Color(0xFFD60A) // yellow
+    } 
+    else if (severity < 0.75) {
+        color = new THREE.Color(0xFF8C00) // orange
     }
-
+    else {
+        color = new THREE.Color(0xD90429); // red
+    }
     return {scale, color};
 }
 
@@ -237,7 +234,7 @@ function makePredictionMarker(prediction, box, globalMin, globalMax) {
     const style = getPredictionStyle(prediction.predicted_mass_balance, globalMin, globalMax);
 
     const marker = new THREE.Mesh(
-        new THREE.SphereGeometry(0.08, 16, 16),
+        predictionMarkerGeometry,
         new THREE.MeshBasicMaterial({
             color: style.color
         })
@@ -311,6 +308,7 @@ function updatePredictionLayer(year, globalMin, globalMax) {
 let model; // keep a reference to model just in case
 let predictionData = []; // Stores the ML prediction records
 
+const predictionMarkerGeometry = new THREE.SphereGeometry(0.08, 16, 16);
 const predictionLayer = new THREE.Group(); // oh yea its layering time
 const predictionMarkers = new Map();
 // =============================
@@ -381,7 +379,7 @@ loader.load('./Assets/mont_blanc.glb',
         camera.far = maxDim * 100;
         camera.updateProjectionMatrix();
 
-// Prediction CSV test pls work
+// Load and initialize prediction data or pleaseload CSV
 try {
     predictionData = await loadPredictionData();
 
@@ -389,15 +387,6 @@ try {
         row => row.hydrological_year === 2027
         );
     
-    const massBalanceValues = predictions2027.map(
-        row => row.predicted_mass_balance
-    );
-    
-    const minMassBalance = Math.min(...massBalanceValues);
-    const maxMassBalance = Math.max(...massBalanceValues);
-
-    console.log("2027 mass balance range:", minMassBalance, "to", maxMassBalance);
-
     // ALL of the 2027-2076 range mass balance 
     const allMassBalanceValues = predictionData.map(
         row => row.predicted_mass_balance
@@ -408,8 +397,6 @@ try {
 
     console.log("Global Mass Balance range:", globalMinMassBalance, "to", globalMaxMassBalance);
     console.log("Total prediction records:", predictionData.length);
-    console.log("2027 prediction records:", predictions2027.length);
-    
     const mapped2027 = predictions2027.map(row => {
     const position = geoToModel(row.latitude, row.longitude);
 
@@ -434,7 +421,6 @@ const outsideModel = mapped2027.filter(row =>
     row.z > box.max.z
 );
 
-console.log("Mapped 2027 positions:",mapped2027.length);
 console.log("Invalid mapped positions:", invalidPositions.length);
 console.log("Positions outside model bounds:", outsideModel.length);
 
@@ -452,10 +438,10 @@ mapped2027.forEach(prediction => {
 console.log("2027 prediction terrain hits:", terrainHits, "/", mapped2027.length);
 console.log("Prediction markers created:", predictionLayer.children.length);
 
-// Links the html Age Slider to the Data from year 2027 to 2076 hopefully and correctly.
+// Connects the year-slider to the prediction layer
 const yearDisplay = document.getElementById("yearDisplay");
-ageSlider.addEventListener("input", () => {
-    const selectedYear = Number(ageSlider.value);
+yearSlider.addEventListener("input", () => {
+    const selectedYear = Number(yearSlider.value);
 
     yearDisplay.textContent = selectedYear;
     updatePredictionLayer(selectedYear, globalMinMassBalance, globalMaxMassBalance);
@@ -569,17 +555,11 @@ const rotateCheckbox = document.getElementById("Rotate");
 let rotateModel = false;
 
 // When checkbox is clicked, toggle rotation
-const ageSlider = document.getElementById("AgeSlider")
+const yearSlider = document.getElementById("AgeSlider")
 rotateCheckbox.addEventListener("change", () => {
     rotateModel = rotateCheckbox.checked;
 });
 
-//When check box is checked, auto progress slider
-const autoCheckbox = document.getElementById("Auto");
-//let autoProgress = false;
-// autoCheckbox.addEventListener("change", () => {
-//     autoProgress = autoCheckbox.checked;
-// });
 
 function animate() {
     if (rotateModel && model && !CALIBRATION_MODE) {
@@ -588,17 +568,6 @@ function animate() {
 
     controls.update(); // required for damping to work
     renderer.render( scene, camera );
-    
-
-    // if (autoProgress) {
-    //     let currentValue = Number(ageSlider.value);
-    //     currentValue += 0.05;
-    //     if (currentValue > Number(ageSlider.max)) {
-    //         currentValue = Number(ageSlider.min);
-    //     }
-    //     ageSlider.value = currentValue;
-    // }
-
 
 }
 renderer.setAnimationLoop(animate);
