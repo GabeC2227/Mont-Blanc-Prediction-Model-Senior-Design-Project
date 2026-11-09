@@ -90,8 +90,7 @@ export async function createGlacierPrototype(model, {
     let label = null;
     if (showLabel && typeof document !== 'undefined') {
         label = document.createElement('div');
-        label.textContent = 'Illustrative glacier change · driven by regional mass-balance forecast';
-        label.style.cssText = 'position:fixed;top:38px;left:10px;right:10px;width:fit-content;max-width:calc(100vw - 40px);z-index:20;padding:7px 10px;border-radius:5px;background:rgba(0,0,0,.65);color:#fff;font:12px/1.4 system-ui,sans-serif;pointer-events:none;';
+        
         document.body.appendChild(label);
     }
     let disposed = false;
