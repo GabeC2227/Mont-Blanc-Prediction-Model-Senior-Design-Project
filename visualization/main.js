@@ -9,6 +9,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
 const renderer = new THREE.WebGLRenderer();
+renderer.setClearColor(0x1b4f8f, 1); // background color blue
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -156,14 +157,14 @@ async function loadPredictionData() {
 }
 
 //too much work and code to make points of interest one by one so I made a function
-function makePointsOfInterest(x, z, color, box) {
+function makePointsOfInterest(x, z, color, box, name, info) {
 
     const marker = new THREE.Mesh(
         new THREE.SphereGeometry(0.2, 32, 32),
         new THREE.MeshBasicMaterial({ color })
     );
 
-    marker.raycast = () => {};
+    
 
     const rayOrigin = new THREE.Vector3(
         x,
@@ -193,6 +194,12 @@ function makePointsOfInterest(x, z, color, box) {
         );
 
         model.add(marker);
+
+        marker.userData.name = name;
+        marker.userData.info = info;
+
+        poiMarkers.push(marker);
+
 
         console.log(`Point of interest placed: x=${x}, z=${z}`);
         return marker;
@@ -313,12 +320,25 @@ let predictionData = []; // Stores the ML prediction records
 const predictionMarkerGeometry = new THREE.SphereGeometry(0.08, 16, 16);
 const predictionLayer = new THREE.Group(); // oh yea its layering time
 const predictionMarkers = new Map();
+
+const poiMarkers = [];
 // =============================
 //     CLICK DEBUGGER 
 // =============================  
 
 const calibrationRaycaster = new THREE.Raycaster();
 const calibrationMouse = new THREE.Vector2();
+
+// The POI Click/ Zoom for Mack's Branch
+
+const poiClickRaycaster = new THREE.Raycaster();
+const poiPointer = new THREE.Vector2();
+
+let zoomGoal = null;
+
+const ZOOM_DISTANCE = 4;
+
+const poiPanel = document.getElementById("poi-ui-panel");
 
 renderer.domElement.addEventListener("click", (event) => {
 
@@ -349,6 +369,54 @@ renderer.domElement.addEventListener("click", (event) => {
         );
     }
 });
+
+// POI Listener for the click raycaster 
+
+renderer.domElement.addEventListener(
+    "click",
+    (event) => {
+
+    if (CALIBRATION_MODE || !model) return;
+
+    const rect = renderer.domElement
+    .getBoundingClientRect();
+
+    poiPointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    poiPointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    poiClickRaycaster.setFromCamera(poiPointer,camera);
+
+    const hits = poiClickRaycaster.intersectObjects(poiMarkers, false);
+
+    if (hits.length === 0) {
+         poiPanel.classList.add("hidden");
+        return;
+    }
+
+    const marker = hits[0].object;
+    const {name, info} = marker.userData;
+
+    poiPanel.innerHTML = `<h2>${name}</h2><p>${info}</p>`;
+    poiPanel.classList.remove("hidden");
+
+    const markerPosition = marker.getWorldPosition(new THREE.Vector3());
+
+    const direction = camera.position.clone()
+    .sub(markerPosition)
+    .normalize();
+
+    rotateModel = false;
+    rotateCheckbox.checked = false;
+
+    zoomGoal = {target: markerPosition,
+        position:
+        markerPosition
+        .clone()
+        .add(direction.multiplyScalar(ZOOM_DISTANCE))
+
+        };
+    }
+);
 
 
 const loader = new GLTFLoader();
@@ -548,25 +616,34 @@ if (CALIBRATION_MODE) {
     // These aren't latitude/longitude values but calibrated using three.js x/z coordinates
 
     //Mont Blanc Summit - red using peakbagger coordinates test coords TEST 1
-    makePointsOfInterest(0.34,6.20,0xff0000,box );
+    makePointsOfInterest(0.34,6.20,0xff0000, box, 
+        'Mont Blanc Summit',
+    'The highest point in the Alps. French surveyors measured the summit at 4,807.47 m in October 2026. The height changes with the snow and ice cap on top of the rock.');
+
 
     //Aiguille du Midi - light blue CALIBRATION TEST 2
-    makePointsOfInterest(2.188, 1.042,0x27C8F5,box);
+    makePointsOfInterest(2.188, 1.042,0x27C8F5,box, 'Aiguille du Midi',
+    'A needle-shaped peak above Chamonix at 3,842 m, reached by cable car. It is the starting point for the Vallée Blanche.');
 
     // Bosson Glaicer - light green 
-    makePointsOfInterest(0.371, 2.072, 0x00ff00, box);
+    makePointsOfInterest(0.371, 2.072, 0x00ff00, box, 'Bosson Glacier',
+    'A glacier that flows from the Mont Blanc summit area down toward the Chamonix valley.');
         
     //Mer de Glace - light pink
-    makePointsOfInterest(6.473,-1.226, 0xED74E7,box);
+    makePointsOfInterest(6.473,-1.226, 0xED74E7, box, 'Mer de Glace',
+    "France's largest glacier, about 7 km long and up to 200 m thick. In the last 30 years it has lost more ice than in the 170 years between 1825 and 1995.");
 
     // Argentiere Glacier - teal
-    makePointsOfInterest(11.193,-5.716,0x0DB896,box);
+    makePointsOfInterest(11.193,-5.716,0x0DB896, box, 'Argentière Glacier',
+        'TODO: add facts about the Argentière Glacier');
 
     // La Vallee Blanche - Magenta 
-    makePointsOfInterest(3.575, 1.525, 0xff00ff, box);
+    makePointsOfInterest(3.575, 1.525, 0xff00ff, box, 'La Vallée Blanche',
+       'A famous off-piste route across glacier ice, starting at the Aiguille du Midi.');
 
     // Glaciar de Bionnassay
-    makePointsOfInterest(-3.032, 6.137,0x00ffff, box);
+    makePointsOfInterest(-3.032, 6.137,0x00ffff, box, 'Bionnassay Glacier',
+        'TODO: add facts about the Bionnassay Glacier');
 
     },
     undefined, // onProgress
@@ -588,8 +665,19 @@ function animate() {
     model.rotation.y += 0.01;   // constant rotation speed
     }
 
+     if (zoomGoal) {
+
+        controls.target.lerp(zoomGoal.target, 0.08);
+
+        camera.position.lerp(zoomGoal.position, 0.08);
+        
+        if (camera.position.distanceTo(zoomGoal.position) < 0.01) {
+            zoomGoal = null;
+        }
+    }
+
     controls.update(); // required for damping to work
-    renderer.render( scene, camera );
+    renderer.render( scene, camera);
 
 }
 renderer.setAnimationLoop(animate);
