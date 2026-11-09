@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mont Blanc</title>
+    <link rel ="stylesheet" href="./style.css">
     <style>
       html,
       body {
@@ -11,7 +12,15 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: black;
+        background: #1b4f8f; /* Stops that black flash before renderder loads*/
+      }
+
+      body,
+
+      .poi-panel,
+      .back-button,
+      .slider-overlay {
+        font-family: "Times New Roman", Times, serif;
       }
 
       canvas {
@@ -27,6 +36,7 @@
         background: rgba(255, 255, 255, 0.8);
         padding: 5px;
         border-radius: 8px;
+        color: #0a2540;
         /* Make the whole box wider, but shrink on small screens */
         width: min(800px, 90%);
         text-align: center;
@@ -49,10 +59,15 @@
     </script>
     <script type="module" src="./main.js"></script>
 
+    <div id="poi-ui-panel" class="poi-panel hidden"></div>
+
     <!-- Age Slider Implementation -->
     <div class="slider-overlay">
-      <p>Age Slider:</p>
-      <input type="range" id="AgeSlider" min="10" max="100" value="10"/>
+      <label for="AgeSlider:">
+        Prediction Year:
+        <span id="yearDisplay">2027</span>
+      </label>
+      <input type="range" id="AgeSlider" min="2027" max="2076" value="2027" step="1">
       <!-- Constant Rotation Check Box -->
       <input type="checkbox" id="Rotate">
       <label for="Rotate">Constant Model Rotation</label>
@@ -63,6 +78,6 @@
         <label for="Auto">Auto Progress Slider</label>
     </div> -->
     
-    <a href="index.html" style="position:absolute;top:16px;left:16px;color:white;">← Back</a>
+    <a class="back-button" href="index.html">← Back</a>
   </body>
 </html>
