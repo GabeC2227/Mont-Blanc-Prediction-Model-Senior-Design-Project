@@ -319,6 +319,7 @@ let predictionData = []; // Stores the ML prediction records
 
 const predictionMarkerGeometry = new THREE.SphereGeometry(0.08, 16, 16);
 const predictionLayer = new THREE.Group(); // oh yea its layering time
+const glacierLayer = new THREE.Group();    // holds Yessi's ice mesh in group
 const predictionMarkers = new Map();
 
 const poiMarkers = [];
@@ -444,6 +445,8 @@ loader.load('./Assets/mont_blanc.glb',
             if (!response.ok) throw new Error(`Forecast JSON failed: ${response.status}`);
             glacierTimeline = buildIllustrativeTimeline(await response.json());
             glacierTest = await createGlacierPrototype(model);
+            model.add(glacierLayer); //moves the mesh from model into the group
+            glacierLayer.add(glacierTest.mesh); //moves the mesh from model into the group
             glacierTest.setRemainingFraction(
                 glacierTimeline.get(Number(document.getElementById('AgeSlider').value)) ?? 1
             );
@@ -658,6 +661,31 @@ const yearSlider = document.getElementById("AgeSlider")
 rotateCheckbox.addEventListener("change", () => {
     rotateModel = rotateCheckbox.checked;
 });
+
+
+// Switch between the two views or both
+function setMode(mode) {
+    if (mode === 'markers') {
+        predictionLayer.visible = true;
+        glacierLayer.visible = false;
+    }
+
+    else if (mode === 'ice') {
+        predictionLayer.visible = false;
+        glacierLayer.visible = true;
+    }
+
+    else if (mode === 'both') {
+        predictionLayer.visible = true;
+        glacierLayer.visible = true;
+    }
+}
+
+document.querySelectorAll('input[name="viewMode"]').forEach((radio) => {
+    radio.addEventListener('change', () => setMode(radio.value));
+});
+
+setMode('markers');   // which view shows first
 
 
 function animate() {

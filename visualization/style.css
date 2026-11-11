@@ -122,7 +122,7 @@ figure {
   border-radius: 10px;
 }
 
-/*Kids mode switch*/
+/*Kids mode switch
 .toggle {
   position: relative;
   box-sizing: border-box;
@@ -180,7 +180,7 @@ figure {
     top: 8px;
     border: 2px dashed #FFF;
 }
-
+*/
 
 /* Images */
 .main-content img {

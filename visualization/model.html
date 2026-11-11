@@ -46,8 +46,64 @@
       .slider-overlay input[type="range"] {
         width: 70%;
       }
+
+      /*style for mode toggles*/
+      .mode-toggle {
+        position: absolute;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 18px;
+        padding: 10px 22px;
+        font-weight: 600;
+        color: #0a2540;
+        background: linear-gradient(135deg, #ffffff, #cfe3ff);
+        border-radius: 999px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+      .mode-toggle label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+      .mode-toggle input {
+        accent-color: #0a2540;
+      }
+
+      /*Key popup*/
+      /* reuses .poi-panel, just centered and wider */
+      .help-panel {
+        top: 50%;
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, -50%);
+        width: min(480px, 90%);
+        max-height: 80vh;
+        overflow-y: auto;
+        z-index: 50;
+      }
+      .help-panel p { margin: 0 0 10px; }
+
+      /* ? button reuses .back-button, moved to the right and shrunk */
+      .help-button {
+        top: 16px;
+        left: auto;
+        right: 16px;
+        margin: 0;
+        padding: 10px 20px;
+        z-index: 60;
+      }
+
+
+
     </style>
+
+
   </head>
+
+
   <body>
     <script type="importmap">
     {
@@ -72,12 +128,35 @@
       <input type="checkbox" id="Rotate">
       <label for="Rotate">Constant Model Rotation</label>
     </div>
-
-    <!-- <div class="checkbox-row">
-        <input type="checkbox" id="Auto">
-        <label for="Auto">Auto Progress Slider</label>
-    </div> -->
     
     <a class="back-button" href="index.html">← Back</a>
+
+    <div class="mode-toggle">
+      <label><input type="radio" name="viewMode" value="markers" checked> Severity markers</label>
+      <label><input type="radio" name="viewMode" value="ice"> Ice cover</label>
+      <label><input type="radio" name="viewMode" value="both"> Both Modes</label>
+    </div>
+
+
+
+    <button class="back-button help-button" id="help-button">?</button>
+
+    <div class="poi-panel help-panel" id="help-panel">
+      <h2>How to Use the Model</h2>
+      <p><strong>While the simulation loads, please read up on how to understand and interact with the model!</strong></p>
+      <p>There are two visualization methods: Ice Cover and Severity Markers. You can switch between both methods or only use one.</p>
+      <p>The Ice Cover method showcases the decline of glaciers on the mountain throughout time.</p>
+      <p>The Severity Markers method doesn’t showcase the decline in the same way. It uses colored dots to show how extreme melting was in that area in that year. Here is the key to follow it:</p>
+      <p>🔵 Blue<br>🟡 Yellow<br>🟠 Orange<br>🔴 Red - Extreme Melting</p>
+      <p>You can reopen this menu at any time via the question mark button in the upper right corner.</p>
+      <p><em>Click this box to close it.</em></p>
+    </div>
+
+    <script>
+      const help = document.getElementById('help-panel');
+      document.getElementById('help-button').onclick = () => help.classList.toggle('hidden');
+      help.onclick = () => help.classList.add('hidden');
+    </script>
+
   </body>
 </html>
