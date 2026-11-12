@@ -346,18 +346,6 @@ Potential future improvements include:
 
 ---
 
-## Project Limitations
-
-The current implementation has several important limitations:
-
-- Results are specific to the Mont Blanc study area.
-- Historical glacier and climate data contain limited spatial and temporal detail.
-- Future predictions depend on the selected **SSP2-4.5** climate scenario.
-- Surface mass-balance predictions describe predicted gain or loss of glacier mass and do not directly predict exact future glacier thickness, volume, or boundaries.
-- The glacier-change overlay is intended as an **illustrative visualization of relative predicted change**, not an exact reconstruction of future glacier geometry.
-
----
-
 ## Contributors
 
 Developed as a **CSCI 495 Senior Design Project** at the University of Tennessee at Martin.
