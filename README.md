@@ -185,14 +185,7 @@ The processed historical modeling dataset covers hydrological years **1968–201
 
 **Source:** Bolibar et al. reconstructed annual glacier-wide mass-balance dataset for glaciers in the French Alps.
 
-<!-- TODO - YESSI:
-Please add or verify the following information for the historical glacier mass-balance dataset:
-- Official dataset name
-- Source / download URL
-- Full citation
-- License or access information
-- Any relevant notes about how the dataset was obtained
--->
+
 
 ---
 
@@ -204,16 +197,7 @@ Monthly climate information is converted into seasonal variables using an Octobe
 
 **Source:** ERA5 climate data from the Copernicus Climate Data Store.
 
-<!-- TODO - YESSI:
-Please add or verify the following information for the ERA5 historical climate dataset:
-- Exact ERA5 dataset/product name
-- Source / download URL
-- Full citation
-- License or access information
-- Climate variables used
-- Historical time period downloaded
-- Any important preprocessing notes
--->
+
 
 ---
 
@@ -225,18 +209,6 @@ Future climate values are spatially mapped to the glacier locations and bias-cor
 
 The processed future dataset contains **58 glacier-related locations across 50 complete hydrological years from 2027–2076**.
 
-<!-- TODO - YESSI:
-Please add or verify the following information for the future climate dataset:
-- Official dataset/model name
-- CNRM-CM6-1 source
-- SSP2-4.5 scenario source
-- Source / download URL
-- Full citation
-- License or access information
-- Climate variables used
-- Historical and future time ranges downloaded
-- Any important notes about interpolation, bias correction, or preprocessing
--->
 
 ---
 
@@ -251,12 +223,7 @@ Primary outputs include:
 - A simplified JSON dataset used by the glacier-change visualization.
 - Geographic coordinates used to place prediction markers on the Three.js terrain.
 
-<!-- TODO - YESSI:
-If additional explanation is useful, add:
-- What each visualization output represents
-- Which notebook generates each file
-- Whether each file is intended for visualization, analysis, or both
--->
+
 
 ---
 
@@ -354,7 +321,4 @@ Developed as a **CSCI 495 Senior Design Project** at the University of Tennessee
 - **McKenzie Hughes** — UI / UX, interaction design, educational interface
 - **Yessi Chavez** — Data science, dataset preparation, machine-learning pipeline, glacier visualization data
 
-<!-- TODO - TEAM:
-Adjust contributor descriptions if needed so responsibilities accurately reflect each team member's final contributions.
--->
 
